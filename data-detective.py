@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import csv
 
-# Load tweets from CSV file into a list
+# open the csv file and load all rows into a list
 tweets = []
 
 try:
@@ -11,18 +11,18 @@ try:
             tweets.append(row)
 
     if len(tweets) == 0:
-        print("The CSV file is empty. No data to process.")
+        print("The file has no data to work with.")
         exit()
 
 except FileNotFoundError:
-    print("Error: twitter_dataset.csv not found. Please add the file and try again.")
+    print("Could not find twitter_dataset.csv, make sure the file is in the same folder.")
     exit()
 
-print(f"Total rows loaded: {len(tweets)}")
+print(f"Rows loaded: {len(tweets)}")
 
 
-# Quest 1: Clean the data
-def clean_data(data):
+# step 1: go through the list and fix or remove bad rows
+def fix_tweets(data):
     cleaned = []
     fixed = 0
 
@@ -41,37 +41,37 @@ def clean_data(data):
 
         cleaned.append(tweet)
 
-    print(f"Bad rows fixed or removed: {fixed}")
+    print(f"Total problems found and fixed: {fixed}")
     return cleaned
 
 
-tweets = clean_data(tweets)
-print(f"Rows after cleaning: {len(tweets)}")
+tweets = fix_tweets(tweets)
+print(f"Rows after cleanup: {len(tweets)}")
 
 
-# Quest 2: Find the most liked tweet without using max()
-def find_most_liked(data):
+# step 2: find the tweet with the most likes by looping through manually
+def get_top_tweet(data):
     if len(data) == 0:
-        print("No data available.")
+        print("List is empty, nothing to search.")
         return
 
-    most_liked = data[0]
+    top = data[0]
 
     for tweet in data:
-        if int(tweet["Likes"]) > int(most_liked["Likes"]):
-            most_liked = tweet
+        if int(tweet["Likes"]) > int(top["Likes"]):
+            top = tweet
 
-    print("\n--- Most Liked Tweet ---")
-    print(f"Username: {most_liked['Username']}")
-    print(f"Likes: {most_liked['Likes']}")
-    print(f"Text: {most_liked['Text']}")
-
-
-find_most_liked(tweets)
+    print("\n--- Top Tweet by Likes ---")
+    print(f"Username: {top['Username']}")
+    print(f"Likes: {top['Likes']}")
+    print(f"Text: {top['Text']}")
 
 
-# Quest 3: Bubble sort by Likes, no .sort() or sorted()
-def bubble_sort(data):
+get_top_tweet(tweets)
+
+
+# step 3: use bubble sort to order tweets from highest to lowest likes
+def sort_by_likes(data):
     n = len(data)
     for i in range(n):
         for j in range(0, n - i - 1):
@@ -80,20 +80,20 @@ def bubble_sort(data):
     return data
 
 
-sorted_tweets = bubble_sort(tweets)
+sorted_tweets = sort_by_likes(tweets)
 top10 = sorted_tweets[:10]
 
-print("\n--- Top 10 Most Liked Tweets ---")
+print("\n--- Top 10 Tweets ---")
 for i, tweet in enumerate(top10):
     print(f"{i + 1}. {tweet['Username']} - Likes: {tweet['Likes']} - {tweet['Text'][:50]}")
 
 
-# Quest 4: Search tweets by keyword
-def search_tweets(data):
-    word = input("\nEnter a search word: ")
+# step 4: ask the user for a word and find all tweets that contain it
+def keyword_search(data):
+    word = input("\nType a word to search for: ")
 
     if word.strip() == "":
-        print("No search word entered.")
+        print("You did not type anything.")
         return
 
     results = []
@@ -102,13 +102,13 @@ def search_tweets(data):
         if word.lower() in tweet["Text"].lower():
             results.append(tweet)
 
-    print(f"\nFound {len(results)} tweets containing '{word}'")
+    print(f"\n{len(results)} tweets found containing '{word}'")
 
     if len(results) == 0:
-        print("No matching tweets found.")
+        print("No tweets matched your search.")
     else:
         for tweet in results:
             print(f"- {tweet['Username']}: {tweet['Text'][:80]}")
 
 
-search_tweets(tweets)
+keyword_search(tweets)
