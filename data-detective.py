@@ -30,8 +30,14 @@ def clean_data(tweets):
             tweet['Likes'] = '0'
         if not tweet.get('Retweets') or tweet['Retweets'].strip() == '':
             tweet['Retweets'] = '0'
-        tweet['Likes'] = int(tweet['Likes'])
-        tweet['Retweets'] = int(tweet['Retweets'])
+        try:
+            tweet['Likes'] = int(tweet['Likes'])
+        except ValueError:
+            tweet['Likes'] = 0
+        try:
+            tweet['Retweets'] = int(tweet['Retweets'])
+        except ValueError:
+            tweet['Retweets'] = 0
         clean_tweets.append(tweet)
     return clean_tweets
 
