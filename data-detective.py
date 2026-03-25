@@ -22,23 +22,19 @@ print(f"Total rows loaded: {len(tweets)}")
 
 
 # Quest 1: Clean the data
-# Remove tweets with missing Text, replace missing Likes/Retweets with 0
 def clean_data(data):
     cleaned = []
     fixed = 0
 
     for tweet in data:
-        # Skip tweet if Text is missing
         if not tweet["Text"] or tweet["Text"].strip() == "":
             fixed += 1
             continue
 
-        # Replace missing Likes with 0
         if not tweet["Likes"] or tweet["Likes"].strip() == "":
             tweet["Likes"] = "0"
             fixed += 1
 
-        # Replace missing Retweets with 0
         if not tweet["Retweets"] or tweet["Retweets"].strip() == "":
             tweet["Retweets"] = "0"
             fixed += 1
@@ -53,8 +49,7 @@ tweets = clean_data(tweets)
 print(f"Rows after cleaning: {len(tweets)}")
 
 
-# Quest 2: Find the tweet with the highest number of Likes
-# No max() used - manually loop and track the highest
+# Quest 2: Find the most liked tweet without using max()
 def find_most_liked(data):
     if len(data) == 0:
         print("No data available.")
@@ -75,8 +70,7 @@ def find_most_liked(data):
 find_most_liked(tweets)
 
 
-# Quest 3: Sort tweets by Likes using Bubble Sort (no .sort() or sorted())
-# Bubble sort repeatedly swaps adjacent elements if they are in the wrong order
+# Quest 3: Bubble sort by Likes, no .sort() or sorted()
 def bubble_sort(data):
     n = len(data)
     for i in range(n):
@@ -94,8 +88,7 @@ for i, tweet in enumerate(top10):
     print(f"{i + 1}. {tweet['Username']} - Likes: {tweet['Likes']} - {tweet['Text'][:50]}")
 
 
-# Quest 4: Search tweets by keyword entered by the user
-# Loops through all tweets and appends matches to a new list
+# Quest 4: Search tweets by keyword
 def search_tweets(data):
     word = input("\nEnter a search word: ")
 
